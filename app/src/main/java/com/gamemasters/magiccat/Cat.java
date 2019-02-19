@@ -14,13 +14,16 @@ public class Cat {
 
     private Rect hitBox;
 
-    public Cat(Context c, int xPosition, int yPosition, int width, int height) {
+    private int movement;
+
+    public Cat(Context c, int xPosition, int yPosition, int width, int height, int movement) {
 
         this.context = c;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.width = width;
         this.height = height;
+        this.movement = movement;
 
         this.hitBox = new Rect(this.xPosition,this.yPosition,this.xPosition+this.width, this.xPosition+yPosition);
     }
