@@ -3,10 +3,12 @@ package com.gamemasters.magiccat;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 
 public class GameHome extends AppCompatActivity {
+
+    // Game Engine Variable
+    private GameEngine gameEngine;
 
     // Define Variables for Screen
     Display display;
@@ -25,6 +27,19 @@ public class GameHome extends AppCompatActivity {
         screenWidth = size.x;
         screenHeight = size.y;
 
-        setContentView(R.layout.activity_game_home);
+        gameEngine = new GameEngine(this, screenWidth, screenHeight);
+        setContentView(gameEngine);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gameEngine.pauseGame();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gameEngine.resumeGame();
     }
 }
