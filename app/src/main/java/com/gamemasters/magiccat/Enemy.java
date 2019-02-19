@@ -3,6 +3,8 @@ package com.gamemasters.magiccat;
 import android.content.Context;
 import android.graphics.Rect;
 
+import java.util.ArrayList;
+
 public class Enemy {
 
     private Context context;
@@ -13,15 +15,19 @@ public class Enemy {
     private int width;
     private int height;
 
+    // Sign is for the type of enemy, 0 and 1 for vertical and horizontal: the only two types of enemies there.
+    private ArrayList <Integer> sign = new ArrayList();
+
     private Rect hitBox;
 
-    public Enemy(Context c, int xPosition, int yPosition, int width, int height) {
+    public Enemy(Context c, int xPosition, int yPosition, int width, int height, ArrayList <Integer> sign) {
 
         this.context = c;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.width = width;
         this.height = height;
+        this.sign = sign;
 
         this.hitBox = new Rect(this.xPosition,this.yPosition,this.xPosition+this.width, this.xPosition+yPosition);
     }
