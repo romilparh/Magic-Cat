@@ -16,11 +16,13 @@ public class Enemy {
     private int height;
 
     // Sign is for the type of enemy, 0 and 1 for vertical and horizontal: the only two types of enemies there.
-    private ArrayList <Integer> sign = new ArrayList();
+    private ArrayList <Integer> sign;
 
     private Rect hitBox;
 
     public Enemy(Context c, int xPosition, int yPosition, int width, int height, ArrayList <Integer> sign) {
+
+        this.sign =  new ArrayList();
 
         this.context = c;
         this.xPosition = xPosition;
