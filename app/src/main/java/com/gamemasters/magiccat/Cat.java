@@ -12,6 +12,8 @@ public class Cat {
     private int width;
     private int height;
 
+
+
     private Rect hitBox;
 
     private int movement;
@@ -53,5 +55,12 @@ public class Cat {
         } else{
             return false;
         }
+    }
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
     }
 }
