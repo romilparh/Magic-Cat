@@ -156,8 +156,11 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     public void updateGame(){
 
-        if (player.getHitbox().intersect(enemies.get(0).getHitbox())) {
+        if (player.getHitbox().intersect(enemies.get(0).hitBox)) {
             enemies.remove(0);
+            Log.d("Pop","Popped");
+        } else {
+            Log.d("NotPop","NotPopped");
         }
 
     }
