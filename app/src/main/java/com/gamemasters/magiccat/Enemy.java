@@ -34,8 +34,9 @@ public class Enemy {
         this.hitBox = new Rect(this.xPosition,this.yPosition,this.xPosition+this.width, this.xPosition+yPosition);
     }
 
-    public void updateEnemyPosition() {
-        // override this in the child class
+    public void updateEnemyPosition(int xPosition, int yPosition) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
     }
 
     public void setXPosition(int xPosition){
