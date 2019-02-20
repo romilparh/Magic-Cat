@@ -145,8 +145,10 @@ public class GameEngine extends SurfaceView implements Runnable {
         double xSpeed = xDist/distance;
         double ySpeed = yDist/distance;
 
-        this.enemies.get(0).xPosition = enemies.get(0).xPosition+(int)(xSpeed*10);
-        this.enemies.get(0).yPosition = enemies.get(0).yPosition+(int)(ySpeed*10);
+        this.enemies.get(0).updateEnemyPosition(this.enemies.get(0).xPosition+(int)(xSpeed*10),this.enemies.get(0).yPosition+(int)(ySpeed*10));
+
+       // this.enemies.get(0).xPosition = this.enemies.get(0).xPosition+(int)(xSpeed*10);
+       // this.enemies.get(0).yPosition = this.enemies.get(0).yPosition+(int)(ySpeed*10);
 
         Log.d("Updated Game","Updated"+enemies.get(0).xPosition);
 
@@ -155,6 +157,8 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
     public void updateGame(){
+
+        System.out.println(enemies.get(0).hitBox);
 
         if (player.getHitbox().intersect(enemies.get(0).hitBox)) {
             enemies.remove(0);
