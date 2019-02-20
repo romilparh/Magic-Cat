@@ -38,6 +38,14 @@ public class Enemy {
         // override this in the child class
     }
 
+    public void setXPosition(int xPosition){
+        this.xPosition = xPosition;
+    }
+
+    public void setYPosition(int yPosition){
+        this.yPosition = yPosition;
+    }
+
     public void updateHitbox() {
         hitBox.left = this.xPosition;
         hitBox.top = this.yPosition;
