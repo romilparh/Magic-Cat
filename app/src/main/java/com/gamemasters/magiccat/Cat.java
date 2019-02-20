@@ -15,6 +15,7 @@ public class Cat {
     private Rect hitBox;
 
     private int movement;
+    private int lives;
 
     public Cat(Context c, int xPosition, int yPosition, int width, int height, int movement) {
 
@@ -24,6 +25,8 @@ public class Cat {
         this.width = width;
         this.height = height;
         this.movement = movement;
+
+        this.lives = 5;
 
         this.hitBox = new Rect(this.xPosition,this.yPosition,this.xPosition+this.width, this.xPosition+yPosition);
     }
@@ -37,5 +40,18 @@ public class Cat {
 
     public Rect getHitbox() {
         return this.hitBox;
+    }
+
+    public boolean reduceLives(){
+        if(this.lives == 1){
+            // game over
+            lives --;
+            return false;
+        } else if(this.lives>1){
+            lives --;
+            return true;
+        } else{
+            return false;
+        }
     }
 }
