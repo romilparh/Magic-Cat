@@ -150,7 +150,7 @@ public class GameEngine extends SurfaceView implements Runnable {
        // this.enemies.get(0).xPosition = this.enemies.get(0).xPosition+(int)(xSpeed*10);
        // this.enemies.get(0).yPosition = this.enemies.get(0).yPosition+(int)(ySpeed*10);
 
-        Log.d("Updated Game","Updated"+enemies.get(0).xPosition);
+        //Log.d("Updated Game","Updated x position : "+enemies.get(0).getxPosition());
 
 
     }
@@ -160,11 +160,18 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         System.out.println(enemies.get(0).hitBox);
 
-        if (player.getHitbox().intersect(enemies.get(0).hitBox)) {
+        if (player.getHitbox().intersect(enemies.get(0).getHitbox())) {
             enemies.remove(0);
             Log.d("Pop","Popped");
-            this.resetGame();
+
         } else {
+
+            Log.d("Updated Game","Enemy: Updated x position : "+enemies.get(0).getxPosition());
+            Log.d("Updated Game","Cat: Updated x position : "+player.getxPosition());
+
+            Log.d("Updated Game","Enemy: Updated y position : "+enemies.get(0).getyPosition());
+            Log.d("Updated Game","Cat: Updated y position : "+player.getyPosition());
+
             Log.d("NotPop","NotPopped");
         }
 
