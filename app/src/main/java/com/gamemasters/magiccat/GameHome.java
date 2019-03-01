@@ -43,3 +43,5 @@ public class GameHome extends AppCompatActivity {
         gameEngine.resumeGame();
     }
 }
+
+// Start Rebasing Project to it's OOP Structure
