@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -111,10 +112,18 @@ public class GameEngine extends SurfaceView implements Runnable {
                 this.paintbrush.setStyle(Paint.Style.STROKE);
                 this.paintbrush.setStrokeWidth(10);
                 this.paintbrush.setColor(Color.WHITE);
-                this.canvas.drawRect(this.cat.getHitbox(), this.paintbrush);
+                this.canvas.drawBitmap(resizeBitmapMatrix(this.cat.catImage),this.cat.getxPosition(),this.cat.getyPosition(),this.paintbrush);
+                //this.canvas.drawRect(this.cat.getHitbox(), this.paintbrush);
 
+                for(int i=0;i<cat.getLives();i++){
+                    this.canvas.drawBitmap(resizeLifeBitmapMatrix(this.cat.heart),10+this.cat.getLifeGap(),10,this.paintbrush);
+                    this.cat.updateLifeGap();
+                }
+
+                this.cat.setLifeGap(10);
                 for (int i = 0; i < this.enemies.size(); i++) {
-                    this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
+                    this.canvas.drawBitmap(resizeBitmapMatrix(this.enemies.get(i).monsterImage),this.enemies.get(i).getxPosition(),this.enemies.get(i).getyPosition(),this.paintbrush);
+                    //this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
                 }
             } else {
                 // Game Over Draw
@@ -129,6 +138,34 @@ public class GameEngine extends SurfaceView implements Runnable {
             this.holder.unlockCanvasAndPost(this.canvas);
         }
 
+    }
+
+    public Bitmap resizeBitmapMatrix(Bitmap bm){
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) 100) / width;
+        float scaleHeight = ((float) 100) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
+    public Bitmap resizeLifeBitmapMatrix(Bitmap bm){
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) 50) / width;
+        float scaleHeight = ((float) 50) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
     }
 
     // Function to either detect collision and delete the enemy object from list, or update the x and y coordinates of enemy
