@@ -1,6 +1,8 @@
 package com.gamemasters.magiccat;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 public class Cat {
@@ -10,7 +12,7 @@ public class Cat {
     protected int yPosition;
 
     private int width;
-    private int height;
+    private int lifeGap;
 
 
 
@@ -19,13 +21,17 @@ public class Cat {
     private int movement;
     private int lives;
 
+    Bitmap catImage,heart;
+
     public Cat(Context c, int screenHeight, int screenWidth) {
 
         this.context = c;
+        this.catImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.cat);
+        this.heart = BitmapFactory.decodeResource(context.getResources(),R.drawable.heart);
         this.xPosition = (screenWidth/2)-50;
         this.yPosition = (int)(0.7*screenHeight);
         this.width = 100;
-        this.height = 100;
+        this.lifeGap = 0;
         this.movement = 0;
 
         this.lives = 5;
@@ -84,5 +90,21 @@ public class Cat {
 
     public void resetLives(){
         this.lives = 5;
+    }
+
+    public int getLives(){
+        return this.lives;
+    }
+
+    public int getLifeGap(){
+        return this.lifeGap;
+    }
+
+    public void updateLifeGap(){
+        lifeGap+=75;
+    }
+
+    public void setLifeGap(int lifeGap){
+        this.lifeGap = lifeGap;
     }
 }
