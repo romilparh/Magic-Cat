@@ -160,7 +160,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     public void spawnEnemy() {
         Random rand = new Random();
-        for (int i = 0; i <= rand.nextInt(2); i++) {
+        for (int i = 0; i <= rand.nextInt(1); i++) {
             enemies.add(new Enemy(this.getContext(), this.screenHeight, this.screenWidth));
         }
     }
@@ -168,6 +168,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     public void resetGame() {
         try {
             Thread.sleep(1000);
+            this.cat.resetLives();
             this.spawnEnemy();
         } catch (InterruptedException e) {
             e.printStackTrace();
