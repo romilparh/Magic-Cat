@@ -44,15 +44,14 @@ public class GameEngine extends SurfaceView implements Runnable {
             this.updateGame();
             this.drawGame();
             this.controlFPS();
-            Log.d("Game Updating","Game Running"+enemies.get(0).xPosition);
+            Log.d("Game Updating", "Game Running");
         }
     }
 
     public void controlFPS() {
         try {
             this.gameThread.sleep(60);
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
 
         }
     }
@@ -70,7 +69,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         this.background = BitmapFactory.decodeResource(context.getResources(), R.drawable.bg);
         // resize the image to match the phone
-        this.background = Bitmap.createScaledBitmap(background,this.screenWidth, this.screenHeight, false);
+        this.background = Bitmap.createScaledBitmap(background, this.screenWidth, this.screenHeight, false);
 
         this.spawnCat();
         this.spawnEnemy();
@@ -81,13 +80,12 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.gameIsRunning = false;
         try {
             this.gameThread.join();
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void  resumeGame() {
+    public void resumeGame() {
         this.gameIsRunning = true;
         this.gameThread = new Thread(this);
         this.gameThread.start();
@@ -103,26 +101,29 @@ public class GameEngine extends SurfaceView implements Runnable {
             // @TODO: put your drawing code in this section
 
             // set the game's background color
-            this.canvas.drawColor(Color.argb(255,255,255,255));
+            this.canvas.drawColor(Color.argb(255, 255, 255, 255));
 
             // @TODO: Draw the background
-            this.canvas.drawBitmap(this.background, 0,0, this.paintbrush);
+            this.canvas.drawBitmap(this.background, 0, 0, this.paintbrush);
 
-            if(cat.isAllowedToPlay()){
+            if (cat.isAllowedToPlay()) {
                 // @TODO:  Draw a stationary object on the screen (Player)
                 this.paintbrush.setStyle(Paint.Style.STROKE);
                 this.paintbrush.setStrokeWidth(10);
                 this.paintbrush.setColor(Color.WHITE);
-                this.canvas.drawRect(this.cat.getHitbox(),this.paintbrush);
+                this.canvas.drawRect(this.cat.getHitbox(), this.paintbrush);
 
-                for(int i = 0; i<this.enemies.size();i++){
+                for (int i = 0; i < this.enemies.size(); i++) {
                     this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
                 }
-            } else{
+            } else {
                 // Game Over Draw
-                paintbrush.setColor(Color.WHITE);
-                paintbrush.setTextSize(100);
-                canvas.drawText("GAME OVER", screenWidth/2, screenHeight/2, paintbrush);
+                for (int i = 0; i < this.enemies.size(); i++) {
+                    this.enemies.remove(i);
+                }
+                this.paintbrush.setColor(Color.WHITE);
+                this.paintbrush.setTextSize(100);
+                this.canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
             }
 
             this.holder.unlockCanvasAndPost(this.canvas);
@@ -131,37 +132,43 @@ public class GameEngine extends SurfaceView implements Runnable {
     }
 
     // Function to either detect collision and delete the enemy object from list, or update the x and y coordinates of enemy
-    public void updateGame(){
-        for(int i=0;i<this.enemies.size();i++){
-            if(this.cat.getHitbox().intersect(this.enemies.get(i).getHitbox())){
-                this.cat.reduceLives();
-                this.cat.updateHitbox();
-                this.enemies.remove(i);
-                this.spawnEnemy();
-            } else{
-                this.cat.updateHitbox();
-                this.enemies.get(i).updateEnemyPosition(this.cat.getxPosition(),this.cat.getyPosition());
-                Log.d("Update Enemy Position","Update Enemy Position");
+    public void updateGame() {
+        if(this.cat.isAllowedToPlay()){
+            for (int i = 0; i < this.enemies.size(); i++) {
+                if (this.cat.getHitbox().intersect(this.enemies.get(i).getHitbox())) {
+                    this.cat.reduceLives();
+                    this.cat.updateHitbox();
+                    this.enemies.remove(i);
+                    this.spawnEnemy();
+                } else {
+                    this.cat.updateHitbox();
+                    this.enemies.get(i).updateEnemyPosition(this.cat.getxPosition(), this.cat.getyPosition());
+                    Log.d("Update Enemy Position", "Update Enemy Position");
+                }
             }
+        } else {
+            // NOTHING
         }
+
     }
 
-    private void spawnCat() {
+    public void spawnCat() {
         // put player in middle of screen --> you may have to adjust the Y position
         // depending on your device / emulator
-        this.cat = new Cat(this.getContext(),this.screenHeight,this.screenWidth);
+        this.cat = new Cat(this.getContext(), this.screenHeight, this.screenWidth);
     }
 
-    private void spawnEnemy(){
+    public void spawnEnemy() {
         Random rand = new Random();
-        for(int i=0;i<=rand.nextInt(2);i++){
-            enemies.add(new Enemy(this.getContext(),this.screenHeight,this.screenWidth));
+        for (int i = 0; i <= rand.nextInt(1); i++) {
+            this.enemies.add(new Enemy(this.getContext(), this.screenHeight, this.screenWidth));
         }
     }
 
     public void resetGame() {
         try {
             Thread.sleep(1000);
+            this.cat.resetLives();
             this.spawnEnemy();
         } catch (InterruptedException e) {
             e.printStackTrace();
