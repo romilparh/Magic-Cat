@@ -1,6 +1,8 @@
 package com.gamemasters.magiccat;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import java.util.Random;
 
@@ -13,23 +15,25 @@ public class Enemy {
 
 
     private int width;
-    private int height;
 
     // Sign is for the type of enemy, false for horizontal, true for vertical
     protected boolean sign;
 
     Rect hitBox;
 
+    Bitmap monsterImage;
+
     public Enemy(Context c,int screenHeight, int screenWidth) {
 
         this.context = c;
+
         this.xPosition = this.generateRandomXCoordinate(screenWidth);
         this.yPosition = this.generateRandomYCoordinate(screenHeight);
         this.width = 100;
-        this.height = 100;
         this.sign = this.generateRandomSignBoolean();
 
         this.hitBox = new Rect(this.xPosition, this.yPosition, this.xPosition + this.width, this.xPosition + yPosition);
+        generateMonsterImage();
     }
 
     public void updateHitbox() {
@@ -39,6 +43,14 @@ public class Enemy {
         this.hitBox.left = this.xPosition;
         this.hitBox.right = this.xPosition + 100;
         this.hitBox.bottom = this.yPosition + 100;
+    }
+
+    public void generateMonsterImage(){
+        if(this.sign){
+            this.monsterImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.monster);
+        } else{
+            this.monsterImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.ghost);
+        }
     }
 
     public void updateEnemyPosition(int playerXPosition,int playerYPosition){
