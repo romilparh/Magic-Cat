@@ -81,4 +81,8 @@ public class Cat {
             return true;
         }
     }
+
+    public void resetLives(){
+        this.lives = 5;
+    }
 }
