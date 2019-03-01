@@ -62,6 +62,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==true){
                                 gameEngine.enemies.remove(i);
+                                gameEngine.score++;
                             }
                         }
                         gameEngine.spawnEnemy();
@@ -77,6 +78,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==true){
                                 gameEngine.enemies.remove(i);
+                                gameEngine.score++;
                             }
                         }
                         gameEngine.spawnEnemy();
@@ -93,6 +95,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==false){
                                 gameEngine.enemies.remove(i);
+                                gameEngine.score++;
                             }
                         }
                         gameEngine.spawnEnemy();
@@ -106,6 +109,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==false){
                                 gameEngine.enemies.remove(i);
+                                gameEngine.score++;
                             }
                         }
                         gameEngine.spawnEnemy();

@@ -28,6 +28,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     // Screen Resolution Variables
     private int screenWidth;
     private int screenHeight;
+    int score = 0;
 
     // Player Variable
     Cat cat;
@@ -117,6 +118,9 @@ public class GameEngine extends SurfaceView implements Runnable {
 
                 for(int i=0;i<cat.getLives();i++){
                     this.canvas.drawBitmap(resizeLifeBitmapMatrix(this.cat.heart),10+this.cat.getLifeGap(),10,this.paintbrush);
+                    this.paintbrush.setStrokeWidth(1);
+                    this.paintbrush.setTextSize(50);
+                    this.canvas.drawText("Score: "+this.score, 10, 100, paintbrush);
                     this.cat.updateLifeGap();
                 }
 
@@ -132,7 +136,13 @@ public class GameEngine extends SurfaceView implements Runnable {
                 }
                 this.paintbrush.setColor(Color.WHITE);
                 this.paintbrush.setTextSize(100);
+                this.paintbrush.setStrokeWidth(10);
                 this.canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
+                this.paintbrush.setStrokeWidth(1);
+                this.paintbrush.setTextSize(50);
+                this.canvas.drawText("Swipe to Restart", screenWidth / 2 , screenHeight / 2+150, paintbrush);
+                this.paintbrush.setTextSize(100);
+                this.paintbrush.setStrokeWidth(10);
             }
 
             this.holder.unlockCanvasAndPost(this.canvas);
@@ -205,6 +215,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     public void resetGame() {
         try {
             Thread.sleep(1000);
+            this.score = 0;
             this.cat.resetLives();
             this.spawnEnemy();
         } catch (InterruptedException e) {
