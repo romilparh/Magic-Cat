@@ -57,7 +57,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
             try {
                 // downward swipe
                 if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY){
-                    Toast.makeText(GameHome.this, "Downward Swipe"+e2.getY()+" "+e1.getY(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GameHome.this, "Downward Swipe"+e2.getY()+" "+e1.getY(), Toast.LENGTH_SHORT).show();
                     if(gameEngine.cat.isAllowedToPlay()){
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==true){
@@ -72,7 +72,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
 
 
                 else if (Math.abs(e2.getY() - e1.getY()) > SWIPE_MAX_OFF_PATH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY){
-                    Toast.makeText(GameHome.this, "Upward Swipe"+e2.getY()+e1.getY(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GameHome.this, "Upward Swipe"+e2.getY()+e1.getY(), Toast.LENGTH_SHORT).show();
                     if(gameEngine.cat.isAllowedToPlay()){
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==true){
@@ -88,7 +88,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                     // right to left swipe
 
                 else if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    Toast.makeText(GameHome.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GameHome.this, "Left Swipe", Toast.LENGTH_SHORT).show();
                     if(gameEngine.cat.isAllowedToPlay()){
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==false){
@@ -101,7 +101,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                     }
                 }
                 else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    Toast.makeText(GameHome.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GameHome.this, "Right Swipe", Toast.LENGTH_SHORT).show();
                     if(gameEngine.cat.isAllowedToPlay()){
                         for(int i = 0;i<gameEngine.enemies.size();i++){
                             if(gameEngine.enemies.get(i).getSignBoolean()==false){
