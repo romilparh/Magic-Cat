@@ -96,4 +96,8 @@ public class Enemy {
         Random rand = new Random();
         return rand.nextBoolean();
     }
+
+    public boolean getSignBoolean(){
+        return this.sign;
+    }
 }
