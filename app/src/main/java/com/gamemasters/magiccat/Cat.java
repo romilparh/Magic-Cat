@@ -19,48 +19,57 @@ public class Cat {
     private int movement;
     private int lives;
 
-    public Cat(Context c, int xPosition, int yPosition, int width, int height, int movement) {
+    public Cat(Context c, int screenHeight, int screenWidth) {
 
         this.context = c;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
-        this.movement = movement;
+        this.xPosition = (screenWidth/2)-50;
+        this.yPosition = (int)(0.7*screenHeight);
+        this.width = 100;
+        this.height = 100;
+        this.movement = 0;
 
         this.lives = 5;
 
         this.hitBox = new Rect(this.xPosition,this.yPosition,this.xPosition+this.width, this.xPosition+yPosition);
     }
 
-    public void updateHitbox() {
-        hitBox.left = this.xPosition;
-        hitBox.top = this.yPosition;
-        hitBox.right = this.xPosition + this.width;
-        hitBox.bottom = this.yPosition + this.height;
-    }
-
     public Rect getHitbox() {
         return this.hitBox;
     }
 
-    public boolean reduceLives(){
-        if(this.lives == 1){
-            // game over
-            lives --;
-            return false;
-        } else if(this.lives>1){
-            lives --;
-            return true;
-        } else{
-            return false;
-        }
-    }
     public int getxPosition() {
         return xPosition;
     }
 
     public int getyPosition() {
         return yPosition;
+    }
+
+    public void reduceLives(){
+        this.lives--;
+    }
+
+    public void updateMovement(int movement){
+        // 1- Horizontal
+        // 2- Vertical
+        // other- invalid
+
+        this.movement = movement;
+    }
+
+    public boolean movementKill(){
+        if(this.movement == 1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean isAllowedToPlay(){
+        if(this.lives<=0){
+            return false;
+        } else{
+            return true;
+        }
     }
 }
