@@ -44,7 +44,7 @@ public class GameEngine extends SurfaceView implements Runnable {
             this.updateGame();
             this.drawGame();
             this.controlFPS();
-            Log.d("Game Updating", "Game Running" + enemies.get(0).xPosition);
+            Log.d("Game Updating", "Game Running");
         }
     }
 
@@ -118,6 +118,9 @@ public class GameEngine extends SurfaceView implements Runnable {
                 }
             } else {
                 // Game Over Draw
+                for (int i = 0; i < this.enemies.size(); i++) {
+                    this.enemies.remove(i);
+                }
                 paintbrush.setColor(Color.WHITE);
                 paintbrush.setTextSize(100);
                 canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
@@ -149,13 +152,13 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     }
 
-    private void spawnCat() {
+    public void spawnCat() {
         // put player in middle of screen --> you may have to adjust the Y position
         // depending on your device / emulator
         this.cat = new Cat(this.getContext(), this.screenHeight, this.screenWidth);
     }
 
-    private void spawnEnemy() {
+    public void spawnEnemy() {
         Random rand = new Random();
         for (int i = 0; i <= rand.nextInt(2); i++) {
             enemies.add(new Enemy(this.getContext(), this.screenHeight, this.screenWidth));
