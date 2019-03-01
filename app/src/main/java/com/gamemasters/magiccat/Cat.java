@@ -30,7 +30,7 @@ public class Cat {
 
         this.lives = 5;
 
-        this.hitBox = new Rect(this.xPosition,this.yPosition,this.xPosition+this.width, this.xPosition+yPosition);
+        this.hitBox = new Rect(this.xPosition, this.yPosition, this.xPosition + this.width, this.xPosition + this.yPosition);
     }
 
     public Rect getHitbox() {
@@ -38,11 +38,20 @@ public class Cat {
     }
 
     public int getxPosition() {
-        return xPosition;
+        return this.xPosition;
+    }
+
+    public void updateHitbox() {
+
+        // update the position of the hit-box
+        this.hitBox.top = this.yPosition;
+        this.hitBox.left = this.xPosition;
+        this.hitBox.right = this.xPosition + 100;
+        this.hitBox.bottom = this.yPosition + 100;
     }
 
     public int getyPosition() {
-        return yPosition;
+        return this.yPosition;
     }
 
     public void reduceLives(){
