@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.Random;
 
 public class GameEngine extends SurfaceView implements Runnable {
 
@@ -136,6 +137,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     public void updateEnemyPosition() {
 
         // Move The Enemy
+        // make it for arraylist
 
         double xDist = this.player.xPosition - this.enemies.get(0).xPosition;
         double yDist = this.player.yPosition - this.enemies.get(0).yPosition;
@@ -158,8 +160,7 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     public void updateGame(){
 
-        System.out.println(enemies.get(0).hitBox);
-
+        // Make it for arraylist
         if (player.getHitbox().intersect(enemies.get(0).getHitbox())) {
             enemies.remove(0);
             Log.d("Pop","Popped");
@@ -186,11 +187,12 @@ public class GameEngine extends SurfaceView implements Runnable {
     private void spawnEnemy(){
         ArrayList<Integer> sign = new ArrayList<>();
         sign.add(10);
+        // add function
+        // get enemy number on screen ie in arraylist, add new enemy to it
         enemies.add(new Enemy(this.getContext(),100,100,100,100,sign));
     }
 
     public void resetGame() {
-        // spawn finger back in starting position
         try {
             Thread.sleep(1000);
             this.spawnEnemy();
@@ -198,6 +200,17 @@ public class GameEngine extends SurfaceView implements Runnable {
             e.printStackTrace();
         }
 
+
+    }
+
+    // Generate X Coordinate
+    public void randomXCoordinate(){
+
+    }
+
+    // Generate Y Coordinate
+
+    public void randomYCoordinate(){
 
     }
 }
