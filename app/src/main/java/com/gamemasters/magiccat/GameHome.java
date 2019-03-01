@@ -30,25 +30,25 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        display = getWindowManager().getDefaultDisplay();
-        size = new Point();
+        this.display = getWindowManager().getDefaultDisplay();
+        this.size = new Point();
 
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
+        this.display.getSize(size);
+        this.screenWidth = size.x;
+        this.screenHeight = size.y;
 
         // Gesture detection
-        gestureDetector = new GestureDetector(new MyGestureDetector());
-        gestureListener = new View.OnTouchListener() {
+        this.gestureDetector = new GestureDetector(new MyGestureDetector());
+        this.gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
             }
         };
 
-        gameEngine = new GameEngine(this, screenWidth, screenHeight);
-        gameEngine.setOnClickListener(GameHome.this);
-        gameEngine.setOnTouchListener(gestureListener);
-        setContentView(gameEngine);
+        this.gameEngine = new GameEngine(this, screenWidth, screenHeight);
+        this.gameEngine.setOnClickListener(GameHome.this);
+        this.gameEngine.setOnTouchListener(gestureListener);
+        this.setContentView(gameEngine);
     }
 
     class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
@@ -58,20 +58,60 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                 // downward swipe
                 if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY){
                     Toast.makeText(GameHome.this, "Downward Swipe"+e2.getY()+" "+e1.getY(), Toast.LENGTH_SHORT).show();
+                    if(gameEngine.cat.isAllowedToPlay()){
+                        for(int i = 0;i<gameEngine.enemies.size();i++){
+                            if(gameEngine.enemies.get(i).getSignBoolean()==true){
+                                gameEngine.enemies.remove(i);
+                            }
+                        }
+                        gameEngine.spawnEnemy();
+                    } else{
+                        gameEngine.resetGame();
+                    }
                 }
 
 
                 else if (Math.abs(e2.getY() - e1.getY()) > SWIPE_MAX_OFF_PATH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY){
                     Toast.makeText(GameHome.this, "Upward Swipe"+e2.getY()+e1.getY(), Toast.LENGTH_SHORT).show();
+                    if(gameEngine.cat.isAllowedToPlay()){
+                        for(int i = 0;i<gameEngine.enemies.size();i++){
+                            if(gameEngine.enemies.get(i).getSignBoolean()==true){
+                                gameEngine.enemies.remove(i);
+                            }
+                        }
+                        gameEngine.spawnEnemy();
+                    } else{
+                        gameEngine.resetGame();
+                    }
                 }
 
                     // right to left swipe
 
                 else if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                     Toast.makeText(GameHome.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+                    if(gameEngine.cat.isAllowedToPlay()){
+                        for(int i = 0;i<gameEngine.enemies.size();i++){
+                            if(gameEngine.enemies.get(i).getSignBoolean()==false){
+                                gameEngine.enemies.remove(i);
+                            }
+                        }
+                        gameEngine.spawnEnemy();
+                    } else{
+                        gameEngine.resetGame();
+                    }
                 }
                 else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                     Toast.makeText(GameHome.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+                    if(gameEngine.cat.isAllowedToPlay()){
+                        for(int i = 0;i<gameEngine.enemies.size();i++){
+                            if(gameEngine.enemies.get(i).getSignBoolean()==false){
+                                gameEngine.enemies.remove(i);
+                            }
+                        }
+                        gameEngine.spawnEnemy();
+                    } else{
+                        gameEngine.resetGame();
+                    }
                 }
             } catch (Exception e) {
                 // nothing
