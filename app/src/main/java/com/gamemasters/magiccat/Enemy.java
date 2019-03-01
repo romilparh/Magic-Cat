@@ -88,7 +88,15 @@ public class Enemy {
 
         // Function to generate Y coordinate for 0 to screen height's value
         Random rand = new Random();
-        int randomNumber = rand.nextInt(screenHeight);
+
+        int upCoordinate = (int)0.3*screenHeight;
+        int downCoordinate = screenHeight - (int)0.3*screenHeight;
+
+        int randomNumber;
+        do{
+            randomNumber = rand.nextInt(screenHeight);
+        }while(randomNumber<=upCoordinate || randomNumber>=downCoordinate);
+
         return randomNumber;
     }
 
