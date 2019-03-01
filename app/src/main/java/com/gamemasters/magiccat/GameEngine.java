@@ -9,10 +9,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.Random;
 
 public class GameEngine extends SurfaceView implements Runnable {
@@ -31,38 +29,28 @@ public class GameEngine extends SurfaceView implements Runnable {
     private int screenHeight;
 
     // Player Variable
-    Cat player;
+    Cat cat;
 
     // Enemy Variables
     List<Enemy> enemies = new ArrayList<Enemy>();
 
-    // Timer Variable (Interval between addition of new enemies)
-
-    private Timer timer;
-
-
     // Background Image
     Bitmap background;
-
-    // Misc
-
-    final int SIZE = 100;
 
 
     @Override
     public void run() {
         while (gameIsRunning == true) {
-            updateGame();
-            updateEnemyPosition();
-            drawGame();
-            controlFPS();
+            this.updateGame();
+            this.drawGame();
+            this.controlFPS();
             Log.d("Game Updating","Game Running"+enemies.get(0).xPosition);
         }
     }
 
     public void controlFPS() {
         try {
-            gameThread.sleep(60);
+            this.gameThread.sleep(60);
         }
         catch (InterruptedException e) {
 
@@ -80,9 +68,9 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
-        background = BitmapFactory.decodeResource(context.getResources(), R.drawable.bg);
+        this.background = BitmapFactory.decodeResource(context.getResources(), R.drawable.bg);
         // resize the image to match the phone
-        background = Bitmap.createScaledBitmap(background,this.screenWidth, this.screenHeight, false);
+        this.background = Bitmap.createScaledBitmap(background,this.screenWidth, this.screenHeight, false);
 
         this.spawnCat();
         this.spawnEnemy();
@@ -90,106 +78,85 @@ public class GameEngine extends SurfaceView implements Runnable {
     }
 
     public void pauseGame() {
-        gameIsRunning = false;
+        this.gameIsRunning = false;
         try {
-            gameThread.join();
+            this.gameThread.join();
         }
         catch (InterruptedException e) {
-
+            e.printStackTrace();
         }
     }
+
     public void  resumeGame() {
-        gameIsRunning = true;
-        gameThread = new Thread(this);
-        gameThread.start();
+        this.gameIsRunning = true;
+        this.gameThread = new Thread(this);
+        this.gameThread.start();
     }
 
 
     public void drawGame() {
-        if (holder.getSurface().isValid()) {
+        if (this.holder.getSurface().isValid()) {
 
             // initialize the canvas
-            canvas = holder.lockCanvas();
+            this.canvas = this.holder.lockCanvas();
             // --------------------------------
             // @TODO: put your drawing code in this section
 
             // set the game's background color
-            canvas.drawColor(Color.argb(255,255,255,255));
+            this.canvas.drawColor(Color.argb(255,255,255,255));
 
             // @TODO: Draw the background
-            canvas.drawBitmap(this.background, 0,0, paintbrush);
+            this.canvas.drawBitmap(this.background, 0,0, this.paintbrush);
 
-            // @TODO:  Draw a stationary object on the screen (Player)
-            paintbrush.setStyle(Paint.Style.STROKE);
-            paintbrush.setStrokeWidth(10);
-            paintbrush.setColor(Color.WHITE);
-            canvas.drawRect(player.xPosition, player.yPosition,player.xPosition+SIZE, player.yPosition+SIZE, paintbrush);
+            if(cat.isAllowedToPlay()){
+                // @TODO:  Draw a stationary object on the screen (Player)
+                this.paintbrush.setStyle(Paint.Style.STROKE);
+                this.paintbrush.setStrokeWidth(10);
+                this.paintbrush.setColor(Color.WHITE);
+                this.canvas.drawRect(this.cat.getHitbox(),this.paintbrush);
 
-            for(int i = 0; i<enemies.size();i++){
-                canvas.drawRect(enemies.get(i).xPosition, enemies.get(i).yPosition,enemies.get(i).xPosition+SIZE, enemies.get(i).yPosition+SIZE, paintbrush);
+                for(int i = 0; i<this.enemies.size();i++){
+                    this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
+                }
+            } else{
+                // Game Over Draw
+                paintbrush.setColor(Color.WHITE);
+                paintbrush.setTextSize(100);
+                canvas.drawText("GAME OVER", screenWidth/2, screenHeight/2, paintbrush);
             }
-            // --------------------------------
-            holder.unlockCanvasAndPost(canvas);
+
+            this.holder.unlockCanvasAndPost(this.canvas);
         }
 
     }
 
-    public void updateEnemyPosition() {
-
-        // Move The Enemy
-        // make it for arraylist
-
-        double xDist = this.player.xPosition - this.enemies.get(0).xPosition;
-        double yDist = this.player.yPosition - this.enemies.get(0).yPosition;
-
-        double distance = Math.sqrt((xDist * xDist) + (yDist * yDist));
-
-        double xSpeed = xDist/distance;
-        double ySpeed = yDist/distance;
-
-        this.enemies.get(0).updateEnemyPosition(this.enemies.get(0).xPosition+(int)(xSpeed*10),this.enemies.get(0).yPosition+(int)(ySpeed*10));
-
-       // this.enemies.get(0).xPosition = this.enemies.get(0).xPosition+(int)(xSpeed*10);
-       // this.enemies.get(0).yPosition = this.enemies.get(0).yPosition+(int)(ySpeed*10);
-
-        //Log.d("Updated Game","Updated x position : "+enemies.get(0).getxPosition());
-
-
-    }
-
-
+    // Function to either detect collision and delete the enemy object from list, or update the x and y coordinates of enemy
     public void updateGame(){
-
-        // Make it for arraylist
-        if (player.getHitbox().intersect(enemies.get(0).getHitbox())) {
-            enemies.remove(0);
-            Log.d("Pop","Popped");
-
-        } else {
-
-            Log.d("Updated Game","Enemy: Updated x position : "+enemies.get(0).getxPosition());
-            Log.d("Updated Game","Cat: Updated x position : "+player.getxPosition());
-
-            Log.d("Updated Game","Enemy: Updated y position : "+enemies.get(0).getyPosition());
-            Log.d("Updated Game","Cat: Updated y position : "+player.getyPosition());
-
-            Log.d("NotPop","NotPopped");
+        for(int i=0;i<this.enemies.size();i++){
+            if(this.cat.getHitbox().intersect(this.enemies.get(i).getHitbox())){
+                this.cat.reduceLives();
+                this.cat.updateHitbox();
+                this.enemies.remove(i);
+                this.spawnEnemy();
+            } else{
+                this.cat.updateHitbox();
+                this.enemies.get(i).updateEnemyPosition(this.cat.getxPosition(),this.cat.getyPosition());
+                Log.d("Update Enemy Position","Update Enemy Position");
+            }
         }
-
     }
 
     private void spawnCat() {
         // put player in middle of screen --> you may have to adjust the Y position
         // depending on your device / emulator
-        this.player = new Cat(this.getContext(), (this.screenWidth/2)-50, (int)(0.7*this.screenHeight),100,100,0);
+        this.cat = new Cat(this.getContext(),this.screenHeight,this.screenWidth);
     }
 
     private void spawnEnemy(){
-        ArrayList<Integer> sign = new ArrayList<>();
-        sign.add(10);
-        // add function
-        // get enemy number on screen ie in arraylist, add new enemy to it
-        enemies.add(new Enemy(this.getContext(),100,100,100,100,sign));
+        Random rand = new Random();
+        for(int i=0;i<=rand.nextInt(2);i++){
+            enemies.add(new Enemy(this.getContext(),this.screenHeight,this.screenWidth));
+        }
     }
 
     public void resetGame() {
@@ -199,18 +166,6 @@ public class GameEngine extends SurfaceView implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    // Generate X Coordinate
-    public void randomXCoordinate(){
-
-    }
-
-    // Generate Y Coordinate
-
-    public void randomYCoordinate(){
-
-    }
 }
