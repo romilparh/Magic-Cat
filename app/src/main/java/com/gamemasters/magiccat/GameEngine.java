@@ -121,9 +121,9 @@ public class GameEngine extends SurfaceView implements Runnable {
                 for (int i = 0; i < this.enemies.size(); i++) {
                     this.enemies.remove(i);
                 }
-                paintbrush.setColor(Color.WHITE);
-                paintbrush.setTextSize(100);
-                canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
+                this.paintbrush.setColor(Color.WHITE);
+                this.paintbrush.setTextSize(100);
+                this.canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
             }
 
             this.holder.unlockCanvasAndPost(this.canvas);
@@ -161,7 +161,7 @@ public class GameEngine extends SurfaceView implements Runnable {
     public void spawnEnemy() {
         Random rand = new Random();
         for (int i = 0; i <= rand.nextInt(1); i++) {
-            enemies.add(new Enemy(this.getContext(), this.screenHeight, this.screenWidth));
+            this.enemies.add(new Enemy(this.getContext(), this.screenHeight, this.screenWidth));
         }
     }
 
