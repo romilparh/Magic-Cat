@@ -25,3 +25,8 @@ The rules of Magic Cat Academy
 7. Images for the Sprites  → Choose your own sprites -- DONE
 
 8. Sounds → Choose your own sounds -- DONE
+
+C0727306: Romil
+C0: Shivam
+C0: Foram
+C0: Himauli
