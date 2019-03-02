@@ -107,4 +107,8 @@ public class Cat {
     public void setLifeGap(int lifeGap){
         this.lifeGap = lifeGap;
     }
+
+    public void increaseLives(){
+        this.lives++;
+    }
 }
