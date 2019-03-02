@@ -9,7 +9,9 @@ The rules of Magic Cat Academy
 1. 3 different “symbols” for enemies + 1 “symbol” for giving extra lives.  The shape of your gesture is your choice. -- DONE
 
 2. 2 types of enemies → single symbol vs. multi-symbol enemy. You must demonstrate:
+
     2a.All single symbols -- DONE
+    
     2b.A multi-symbol enemy -- NOT DONE
     
 3. 1 level with 3 “waves” of enemies -- PLAY UNTIL PLAYER IS ALIVE
