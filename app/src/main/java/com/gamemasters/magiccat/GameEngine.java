@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import android.media.MediaPlayer;
 
 public class GameEngine extends SurfaceView implements Runnable {
 
@@ -29,16 +30,25 @@ public class GameEngine extends SurfaceView implements Runnable {
     private int screenWidth;
     private int screenHeight;
     int score = 0;
+    int winScore;
 
+    int gameOverCount;
     // Player Variable
     Cat cat;
 
+    List<LifeGiver> lifeGivers = new ArrayList<LifeGiver>();
     // Enemy Variables
     List<Enemy> enemies = new ArrayList<Enemy>();
 
     // Background Image
     Bitmap background;
 
+    public MediaPlayer scream;
+    public MediaPlayer backgroundSound;
+    public MediaPlayer killYou;
+    public MediaPlayer tada;
+    public MediaPlayer gameOver;
+    public MediaPlayer lifeUp;
 
     @Override
     public void run() {
@@ -64,10 +74,23 @@ public class GameEngine extends SurfaceView implements Runnable {
         // Initialize the Drawing Variables
         this.holder = this.getHolder();
         this.paintbrush = new Paint();
-
+        this.winScore = 30;
+        this.gameOverCount = 0;
         // Set Screen Height and Width
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+        this.scream = MediaPlayer.create(context, R.raw.scary_scream);
+        this.scream.setLooping(false);
+        this.tada = MediaPlayer.create(context, R.raw.ta_da);
+        this.tada.setLooping(false);
+        this.killYou = MediaPlayer.create(context, R.raw.kill_you);
+        this.killYou.setLooping(false);
+        this.gameOver = MediaPlayer.create(context, R.raw.gameover);
+        this.gameOver.setLooping(false);
+        this.lifeUp = MediaPlayer.create(context, R.raw.lifeup);
+        this.lifeUp.setLooping(false);
+        this.backgroundSound = MediaPlayer.create(context, R.raw.creepy);
+        this.backgroundSound.setLooping(true);
 
         this.background = BitmapFactory.decodeResource(context.getResources(), R.drawable.bg);
         // resize the image to match the phone
@@ -75,13 +98,17 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         this.spawnCat();
         this.spawnEnemy();
+        this.spawnLifeGiver();
 
     }
 
     public void pauseGame() {
         this.gameIsRunning = false;
         try {
+            this.stopSounds();
             this.gameThread.join();
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -113,41 +140,106 @@ public class GameEngine extends SurfaceView implements Runnable {
                 this.paintbrush.setStyle(Paint.Style.STROKE);
                 this.paintbrush.setStrokeWidth(10);
                 this.paintbrush.setColor(Color.WHITE);
-                this.canvas.drawBitmap(resizeBitmapMatrix(this.cat.catImage),this.cat.getxPosition(),this.cat.getyPosition(),this.paintbrush);
-                //this.canvas.drawRect(this.cat.getHitbox(), this.paintbrush);
 
-                for(int i=0;i<cat.getLives();i++){
-                    this.canvas.drawBitmap(resizeLifeBitmapMatrix(this.cat.heart),10+this.cat.getLifeGap(),10,this.paintbrush);
-                    this.paintbrush.setStrokeWidth(1);
-                    this.paintbrush.setTextSize(50);
-                    this.canvas.drawText("Score: "+this.score, 10, 100, paintbrush);
-                    this.cat.updateLifeGap();
+                try{
+                    this.canvas.drawBitmap(resizeBitmapMatrix(this.cat.catImage),this.cat.getxPosition(),this.cat.getyPosition(),this.paintbrush);
+                    //this.canvas.drawRect(this.cat.getHitbox(), this.paintbrush);
+
+                    for(int i=0;i<cat.getLives();i++){
+                        this.canvas.drawBitmap(resizeLifeBitmapMatrix(this.cat.heart),10+this.cat.getLifeGap(),10,this.paintbrush);
+                        this.paintbrush.setStrokeWidth(1);
+                        this.paintbrush.setTextSize(50);
+                        this.canvas.drawText("Score: "+this.score, 10, 100, paintbrush);
+                        this.cat.updateLifeGap();
+                    }
+
+                    this.cat.setLifeGap(10);
+
+                    for (int i = 0; i < this.lifeGivers.size(); i++) {
+                        this.canvas.drawBitmap(resizeBitmapMatrix(this.lifeGivers.get(i).heartImage),this.lifeGivers.get(i).getxPosition(),this.lifeGivers.get(i).getyPosition(),this.paintbrush);
+                        //this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
+                    }
+
+                    for (int i = 0; i < this.enemies.size(); i++) {
+                        this.canvas.drawBitmap(resizeBitmapMatrix(this.enemies.get(i).monsterImage),this.enemies.get(i).getxPosition(),this.enemies.get(i).getyPosition(),this.paintbrush);
+                        //this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
+                    }
+                } catch (Exception e){this.drawGame();
                 }
 
-                this.cat.setLifeGap(10);
-                for (int i = 0; i < this.enemies.size(); i++) {
-                    this.canvas.drawBitmap(resizeBitmapMatrix(this.enemies.get(i).monsterImage),this.enemies.get(i).getxPosition(),this.enemies.get(i).getyPosition(),this.paintbrush);
-                    //this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
-                }
             } else {
                 // Game Over Draw
                 for (int i = 0; i < this.enemies.size(); i++) {
                     this.enemies.remove(i);
                 }
-                this.paintbrush.setColor(Color.WHITE);
-                this.paintbrush.setTextSize(100);
-                this.paintbrush.setStrokeWidth(10);
-                this.canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
-                this.paintbrush.setStrokeWidth(1);
-                this.paintbrush.setTextSize(50);
-                this.canvas.drawText("Swipe to Restart", screenWidth / 2 , screenHeight / 2+150, paintbrush);
-                this.paintbrush.setTextSize(100);
-                this.paintbrush.setStrokeWidth(10);
+                if(this.score<this.winScore){
+                    this.paintbrush.setColor(Color.WHITE);
+                    this.paintbrush.setTextSize(100);
+                    this.paintbrush.setStrokeWidth(10);
+                    this.canvas.drawText("GAME OVER", screenWidth / 2, screenHeight / 2, paintbrush);
+                    this.paintbrush.setStrokeWidth(1);
+                    this.paintbrush.setTextSize(50);
+                    this.canvas.drawText("Swipe to Restart", screenWidth / 2 , screenHeight / 2+150, paintbrush);
+                    this.paintbrush.setTextSize(100);
+                    this.paintbrush.setStrokeWidth(10);
+                    if(this.gameOverCount == 0){
+                        this.playGameOver();
+                        this.gameOverCount++;
+                    }
+                } else{
+                    this.paintbrush.setColor(Color.WHITE);
+                    this.paintbrush.setTextSize(100);
+                    this.paintbrush.setStrokeWidth(10);
+                    this.canvas.drawText("You Win", screenWidth / 2, screenHeight / 2, paintbrush);
+                    this.paintbrush.setStrokeWidth(1);
+                    this.paintbrush.setTextSize(50);
+                    this.canvas.drawText("Swipe to Restart", screenWidth / 2 , screenHeight / 2+150, paintbrush);
+                    this.paintbrush.setTextSize(100);
+                    this.paintbrush.setStrokeWidth(10);
+                    if(this.gameOverCount == 0){
+                        this.playTaDa();
+                        this.gameOverCount++;
+                    }
+                }
+
             }
 
             this.holder.unlockCanvasAndPost(this.canvas);
         }
 
+    }
+
+    public void playBackgroundMusic(){
+        this.backgroundSound.start();
+    }
+
+    public void playScreamMusic(){
+        this.scream.start();
+    }
+
+    public void playKillYou(){
+        this.killYou.start();
+    }
+
+    public void playTaDa(){
+        this.tada.start();
+    }
+
+    public void playGameOver(){
+        this.gameOver.start();
+    }
+
+    public void playLifeUp(){
+        this.lifeUp.start();
+    }
+
+    public void stopSounds(){
+        this.lifeUp.pause();
+        this.gameOver.pause();
+        this.backgroundSound.pause();
+        this.tada.pause();
+        this.killYou.pause();
+        this.scream.pause();
     }
 
     public Bitmap resizeBitmapMatrix(Bitmap bm){
@@ -184,15 +276,27 @@ public class GameEngine extends SurfaceView implements Runnable {
             for (int i = 0; i < this.enemies.size(); i++) {
                 if (this.cat.getHitbox().intersect(this.enemies.get(i).getHitbox())) {
                     this.cat.reduceLives();
-                    this.cat.updateHitbox();
                     this.enemies.remove(i);
-                    this.spawnEnemy();
-                } else {
-                    this.cat.updateHitbox();
+                    this.playScreamMusic();
+                }else {
                     this.enemies.get(i).updateEnemyPosition(this.cat.getxPosition(), this.cat.getyPosition());
                     Log.d("Update Enemy Position", "Update Enemy Position");
                 }
             }
+            for(int i=0;i<this.lifeGivers.size();i++){
+                if(this.cat.getHitbox().intersect(this.lifeGivers.get(i).getHitbox())){
+                    this.cat.increaseLives();
+                    this.lifeGivers.remove(i);
+                    this.playLifeUp();
+                } else{
+                    this.lifeGivers.get(i).updateHeartPosition(this.cat.getxPosition(), this.cat.getyPosition());
+                }
+            }
+
+            if(this.enemies.size()==0){
+                this.spawnEnemy();
+            }
+            this.cat.updateHitbox();
         } else {
             // NOTHING
         }
@@ -207,8 +311,15 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     public void spawnEnemy() {
         Random rand = new Random();
-        for (int i = 0; i <= rand.nextInt(1); i++) {
+        for (int i = 0; i <= rand.nextInt(3); i++) {
             this.enemies.add(new Enemy(this.getContext(), this.screenHeight, this.screenWidth));
+        }
+    }
+
+    public void spawnLifeGiver() {
+        Random rand = new Random();
+        for (int i = 0; i <= rand.nextInt(3); i++) {
+            this.lifeGivers.add(new LifeGiver(this.getContext(), this.screenHeight, this.screenWidth));
         }
     }
 
@@ -216,6 +327,7 @@ public class GameEngine extends SurfaceView implements Runnable {
         try {
             Thread.sleep(1000);
             this.score = 0;
+            this.gameOverCount = 0;
             this.cat.resetLives();
             this.spawnEnemy();
         } catch (InterruptedException e) {
