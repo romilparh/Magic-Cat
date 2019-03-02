@@ -135,7 +135,7 @@ public class GameEngine extends SurfaceView implements Runnable {
             // @TODO: Draw the background
             this.canvas.drawBitmap(this.background, 0, 0, this.paintbrush);
 
-            if (cat.isAllowedToPlay()) {
+            if (this.cat.isAllowedToPlay() && this.enemies.size()>0) {
                 // @TODO:  Draw a stationary object on the screen (Player)
                 this.paintbrush.setStyle(Paint.Style.STROKE);
                 this.paintbrush.setStrokeWidth(10);
@@ -167,6 +167,32 @@ public class GameEngine extends SurfaceView implements Runnable {
                 } catch (Exception e){this.drawGame();
                 }
 
+            } else if(this.cat.isAllowedToPlay() && this.enemies.size()<=0){
+                this.paintbrush.setStyle(Paint.Style.STROKE);
+                this.paintbrush.setStrokeWidth(10);
+                this.paintbrush.setColor(Color.WHITE);
+
+                try{
+                    this.canvas.drawBitmap(resizeBitmapMatrix(this.cat.catImage),this.cat.getxPosition(),this.cat.getyPosition(),this.paintbrush);
+                    //this.canvas.drawRect(this.cat.getHitbox(), this.paintbrush);
+
+                    for(int i=0;i<cat.getLives();i++){
+                        this.canvas.drawBitmap(resizeLifeBitmapMatrix(this.cat.heart),10+this.cat.getLifeGap(),10,this.paintbrush);
+                        this.paintbrush.setStrokeWidth(1);
+                        this.paintbrush.setTextSize(50);
+                        this.canvas.drawText("Score: "+this.score, 10, 100, paintbrush);
+                        this.cat.updateLifeGap();
+                    }
+
+                    this.cat.setLifeGap(10);
+
+                    for (int i = 0; i < this.lifeGivers.size(); i++) {
+                        this.canvas.drawBitmap(resizeBitmapMatrix(this.lifeGivers.get(i).heartImage),this.lifeGivers.get(i).getxPosition(),this.lifeGivers.get(i).getyPosition(),this.paintbrush);
+                        //this.canvas.drawRect(this.enemies.get(i).getHitbox(), this.paintbrush);
+                    }
+
+                } catch (Exception e){this.drawGame();
+                }
             } else {
                 // Game Over Draw
                 for (int i = 0; i < this.enemies.size(); i++) {
