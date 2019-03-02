@@ -1,13 +1,13 @@
 package com.gamemasters.magiccat;
 
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 public class GameHome extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,6 +48,8 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
         this.gameEngine = new GameEngine(this, screenWidth, screenHeight);
         this.gameEngine.setOnClickListener(GameHome.this);
         this.gameEngine.setOnTouchListener(gestureListener);
+        this.gameEngine.playBackgroundMusic();
+        this.gameEngine.playKillYou();
         this.setContentView(gameEngine);
     }
 
@@ -93,7 +95,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                     //Toast.makeText(GameHome.this, "Left Swipe", Toast.LENGTH_SHORT).show();
                     if(gameEngine.cat.isAllowedToPlay()){
                         for(int i = 0;i<gameEngine.enemies.size();i++){
-                            if(gameEngine.enemies.get(i).getSignBoolean()==false){
+                            if(gameEngine.enemies.get(i).getSignBoolean()==false && gameEngine.enemies.get(i).getHorizontalSignBoolean()==false){
                                 gameEngine.enemies.remove(i);
                                 gameEngine.score++;
                             }
@@ -107,7 +109,7 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
                     //Toast.makeText(GameHome.this, "Right Swipe", Toast.LENGTH_SHORT).show();
                     if(gameEngine.cat.isAllowedToPlay()){
                         for(int i = 0;i<gameEngine.enemies.size();i++){
-                            if(gameEngine.enemies.get(i).getSignBoolean()==false){
+                            if(gameEngine.enemies.get(i).getSignBoolean()==false && gameEngine.enemies.get(i).getHorizontalSignBoolean()){
                                 gameEngine.enemies.remove(i);
                                 gameEngine.score++;
                             }
@@ -143,7 +145,3 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
     }
 }
-
-// Start Rebasing Project to it's OOP Structure
-
-// ALL DONE

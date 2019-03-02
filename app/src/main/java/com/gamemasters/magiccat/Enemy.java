@@ -19,6 +19,8 @@ public class Enemy {
     // Sign is for the type of enemy, false for horizontal, true for vertical
     protected boolean sign;
 
+    protected boolean horizontalSign;
+
     Rect hitBox;
 
     Bitmap monsterImage;
@@ -31,6 +33,7 @@ public class Enemy {
         this.yPosition = this.generateRandomYCoordinate(screenHeight);
         this.width = 100;
         this.sign = this.generateRandomSignBoolean();
+        this.horizontalSign = this.generateRandomSignBoolean();
 
         this.hitBox = new Rect(this.xPosition, this.yPosition, this.xPosition + this.width, this.xPosition + yPosition);
         generateMonsterImage();
@@ -49,7 +52,12 @@ public class Enemy {
         if(this.sign){
             this.monsterImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.monster);
         } else{
-            this.monsterImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.ghost);
+            if(horizontalSign){
+                this.monsterImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.ghost);
+            } else{
+                this.monsterImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.ghosty);
+            }
+
         }
     }
 
@@ -119,5 +127,9 @@ public class Enemy {
 
     public boolean getSignBoolean(){
         return this.sign;
+    }
+
+    public boolean getHorizontalSignBoolean(){
+        return this.horizontalSign;
     }
 }
