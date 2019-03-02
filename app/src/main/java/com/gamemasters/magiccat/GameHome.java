@@ -145,7 +145,3 @@ public class GameHome extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
     }
 }
-
-// Start Rebasing Project to it's OOP Structure
-
-// ALL DONE
