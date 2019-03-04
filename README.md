@@ -26,7 +26,12 @@ The rules of Magic Cat Academy
 
 8. Sounds → Choose your own sounds -- DONE
 
-C0727306: Romil
-C0: Shivam
-C0: Foram
-C0: Himauli
+Group Members: -> 
+
+Himauli Patel - C0725975
+
+Foram Panchal - C0711475
+
+Shivam Narendrabhai Gandhi - C0730329
+
+Romil - C0727306
