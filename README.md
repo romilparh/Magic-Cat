@@ -26,7 +26,7 @@ The rules of Magic Cat Academy
 
 8. Sounds → Choose your own sounds -- DONE
 
-Group Members: -> 
+# Group Members: -> 
 
 Himauli Patel - C0725975
 
