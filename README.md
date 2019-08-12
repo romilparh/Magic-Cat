@@ -1,37 +1,5 @@
 # Magic-Cat
 
-Game Development
+It is basic Android implementation of Magic Cat Academy which is a browser game created as a Google Doodle. There are three type of enemies which are killed by either left/right/vertical swipe. Winning is totally based on the score a person scores. There is a lifeline that comes randomly after interval and has to reach the player cat itself. The player keeps on playing until he/she dies. The enemies respawn randomly at random location with a random kill condition. 
 
-Features to implement:
-
-The rules of Magic Cat Academy
-
-1. 3 different “symbols” for enemies + 1 “symbol” for giving extra lives.  The shape of your gesture is your choice. -- DONE
-
-2. 2 types of enemies → single symbol vs. multi-symbol enemy. You must demonstrate:
-
-    2a.All single symbols -- DONE
-    
-    2b.A multi-symbol enemy -- NOT DONE
-    
-3. 1 level with 3 “waves” of enemies -- PLAY UNTIL PLAYER IS ALIVE
-
-4. Game over / Win conditions -- DONE, DEPENDS ON SCORE
-
-5. Player score & lives -- DONE
-
-6. Static background  → Choose your own background -- DONE
-
-7. Images for the Sprites  → Choose your own sprites -- DONE
-
-8. Sounds → Choose your own sounds -- DONE
-
-# Group Members
-
-Himauli Patel - C0725975
-
-Foram Panchal - C0711475
-
-Shivam Narendrabhai Gandhi - C0730329
-
-Romil - C0727306
+It also has "Background Sound Effects" which can be turned ON/OFF by the player itself, either at the beginning or anytime during the play.
